@@ -54,7 +54,7 @@ module ActiveImporter
     end
 
     def self.column(title, field = nil, options = nil, &block)
-      title = title.to_s.strip unless title.is_a?(Integer)
+      title = title.to_s.strip.downcase unless title.is_a?(Integer)
       if columns[title]
         raise "Duplicate importer column '#{title}'"
       end
@@ -271,7 +271,7 @@ module ActiveImporter
     def find_header_index
       required_column_keys = columns.keys.reject { |title| title.is_a?(Integer) || columns[title][:optional] }
       (1..@book.last_row).each do |index|
-        row = @book.row(index).map { |cell| cell.to_s.strip }
+        row = @book.row(index).map { |cell| cell.to_s.strip.downcase }
         return index if required_column_keys.all? { |item| row.include?(item) }
       end
       return nil
